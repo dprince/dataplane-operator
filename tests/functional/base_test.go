@@ -1,6 +1,8 @@
 package functional
 
 import (
+	"encoding/json"
+
 	"github.com/onsi/gomega"
 	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
@@ -44,6 +46,24 @@ func DefaultDataPlaneNoNodeSetSpec() dataplanev1.OpenStackDataPlaneNodeSetSpec {
 		PreProvisioned: true,
 		NodeTemplate: dataplanev1.NodeTemplate{
 			AnsibleSSHPrivateKeySecret: "dataplane-ansible-ssh-private-key-secret",
+		},
+		Nodes: map[string]dataplanev1.NodeSection{},
+	}
+}
+
+func CustomServiceImageSpec() dataplanev1.OpenStackDataPlaneNodeSetSpec {
+	return dataplanev1.OpenStackDataPlaneNodeSetSpec{
+		DeployStrategy: dataplanev1.DeployStrategySection{
+			Deploy: false,
+		},
+		PreProvisioned: true,
+		NodeTemplate: dataplanev1.NodeTemplate{
+			AnsibleSSHPrivateKeySecret: "dataplane-ansible-ssh-private-key-secret",
+			Ansible: dataplanev1.AnsibleOpts{
+				AnsibleVars: map[string]json.RawMessage{
+					"edpm_nova_compute_image": json.RawMessage([]byte(`"blah.test-image:latest"`)),
+				},
+			},
 		},
 		Nodes: map[string]dataplanev1.NodeSection{},
 	}
