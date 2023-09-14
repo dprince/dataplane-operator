@@ -4,6 +4,7 @@ metadata:
   annotations:
     alm-examples: '[]'
     capabilities: Basic Install
+    operators.openshift.io/infrastructure-features: '["disconnected"]'
     operators.operatorframework.io/operator-type: non-standalone
   name: dataplane-operator.v0.0.0
   namespace: placeholder
@@ -11,7 +12,8 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - description: OpenStackDataPlaneNodeSet is the Schema for the openstackdataplanenodesets API
+    - description: OpenStackDataPlaneNodeSet is the Schema for the openstackdataplanenodesets
+        API
       displayName: OpenStack Data Plane NodeSet
       kind: OpenStackDataPlaneNodeSet
       name: openstackdataplanenodesets.dataplane.openstack.org
@@ -23,16 +25,22 @@ spec:
         - urn:alm:descriptor:com.tectonic.ui:booleanSwitch
       - description: AnsiblePort SSH port for Ansible connection
         displayName: Ansible Port
-        path: nodeTemplate.ansiblePort
+        path: nodeTemplate.ansible.ansiblePort
         x-descriptors:
         - urn:alm:descriptor:com.tectonic.ui:number
-      - description: 'AnsibleSSHPrivateKeySecret Private SSH Key secret containing
-          private SSH key for connecting to node. Must be of the form: Secret.data.ssh-privatekey:
-          <base64 encoded private key contents> <https://kubernetes.io/docs/concepts/configuration/secret/#ssh-authentication-secrets>'
+      - description: 'AnsibleSSHPrivateKeySecret Name of a private SSH key secret
+          containing private SSH key for connecting to node. The named secret must
+          be of the form: Secret.data.ssh-privatekey: <base64 encoded private key
+          contents> <https://kubernetes.io/docs/concepts/configuration/secret/#ssh-authentication-secrets>'
         displayName: Ansible SSHPrivate Key Secret
         path: nodeTemplate.ansibleSSHPrivateKeySecret
         x-descriptors:
         - urn:alm:descriptor:io.kubernetes:Secret
+      - description: AnsiblePort SSH port for Ansible connection
+        displayName: Ansible Port
+        path: nodes.ansible.ansiblePort
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:number
       - description: PreProvisioned - Whether the nodes are actually pre-provisioned
           (True) or should be preprovisioned (False)
         displayName: Pre Provisioned
